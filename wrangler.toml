@@ -5,9 +5,5 @@ pages_build_output_dir = "./public"
 [[d1_databases]]
 binding = "DB"
 database_name = "redro-daleel"
-database_id = "REPLACE_WITH_CLOUDFLARE_D1_DATABASE_ID"
+database_id = "91ee50cd-dc15-440a-9132-b32a5a670121"
 migrations_dir = "migrations"
-
-[[r2_buckets]]
-binding = "IMAGES"
-bucket_name = "REPLACE_WITH_R2_BUCKET_NAME"
