@@ -58,7 +58,7 @@
 - `GET /api/businesses/:slug`
 - `POST /api/submissions`
 
-يحتاج مسار التقديم إلى Turnstile صالح وإعداد Gemini. إذا تعذر فحص Gemini، يُحفظ الطلب بحالة `pending_retry` ولا ينشر.
+يحتاج مسار التقديم إلى Turnstile صالحاً بالـ action المحدد `business_submission` وباسم المضيف المطابق لنطاق الطلب، وإعداد Gemini. إذا تعذر فحص Gemini، يُحفظ الطلب بحالة `pending_retry` ولا ينشر.
 
 ## اختبارات منفذة في بيئة التطوير
 
