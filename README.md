@@ -1,62 +1,75 @@
 # Redro دليل
 
-دليل عربي للأعمال والخدمات المحلية، يبدأ بحلب. يعتمد على Cloudflare Pages وPages Functions وD1 وR2، مع مراجعة محتوى الطلبات عبر Google Gemini.
+دليل عربي للأعمال والخدمات المحلية، يبدأ بحلب. يعتمد على Cloudflare Pages وPages Functions وD1، مع مراجعة طلبات الإضافة عبر Google Gemini وحماية النماذج بواسطة Turnstile.
 
-## ما هو موجود في المستودع
+## الحالة الحالية
 
-- واجهة رئيسية عربية RTL متجاوبة مع بحث وتصنيفات وفلترة مدينة ومنطقة.
-- صفحات تفاصيل المشاريع المنشورة.
-- نموذج تقديم طلب مشروع مع Turnstile.
-- مراجعة Gemini، ونشر تلقائي للطلبات التي تجتاز شروط الموافقة.
-- حفظ الطلبات عند تعذر Gemini بحالة `pending_retry`.
-- لوحة إدارة محمية بمفتاح API لإدارة الطلبات والبلاغات والمشاريع والصور، مع لوحة إحصائيات حية من D1 وسجل أحدث النشاطات ونظام تنبيهات محفوظ في D1 للطلبات الجديدة ونتائج Gemini وفشل الفحص والبلاغات، مع تعليم التنبيهات كمقروءة.
-- لوحة صاحب المشروع برمز وصول، مع تعديل بيانات المشروع وإدارة الصور.
-- رفع الصور إلى R2 مع قبول JPEG/PNG/WebP، وحد أقصى 5MB للصورة و8 صور للمشروع.
-- ترحيلات D1 من `0001` إلى `0005`.
+- مستودع GitHub مربوط بمشروع Cloudflare Pages باسم `redro-daleel` على فرع `main`.
+- آخر نشر معروف في Cloudflare نجح، ويستخدم مجلد `public` مع Pages Functions.
+- قاعدة D1 باسم `redro-daleel` مربوطة عبر binding اسمه `DB`.
+- ترحيلات D1 من `0001` إلى `0005` مطبقة.
+- R2 غير مفعّل حالياً؛ لذلك رفع الصور غير متاح، لكنه ليس شرطاً لتشغيل الدليل والبحث والبيانات الأساسية.
+- يلزم ضبط أسرار Gemini وTurnstile ومفتاح الإدارة في Cloudflare Pages، ثم إجراء اختبارات فعلية قبل اعتماد الخدمة للإنتاج.
 
-## تصفح المدن والمناطق
+## الوظائف
 
+- واجهة عربية RTL متجاوبة مع البحث والتصنيفات والمدينة والمنطقة.
+- صفحات تفاصيل للمشاريع المنشورة.
+- نموذج تقديم طلب مشروع محمي بواسطة Turnstile.
+- مراجعة Gemini؛ لا يُنشر الطلب تلقائياً إلا عند استيفاء شروط الموافقة. إذا تعذرت المراجعة، يُحفظ الطلب بحالة `pending_retry` ولا يتم نشره.
+- لوحة إدارة محمية بـ `ADMIN_API_KEY` لإدارة الطلبات والبلاغات والمشاريع والمدن والمناطق والتصنيفات.
+- إحصائيات وسجل نشاط وتنبيهات إدارية محفوظة في D1.
+- لوحة صاحب المشروع لتعديل بيانات مشروعه باستخدام رمز وصول.
+- مسارات الصور موجودة، لكنها تتطلب R2 binding باسم `IMAGES`؛ من دونه تعيد عمليات الرفع خطأ `image_storage_unavailable`.
+
+## واجهات عامة
+
+- `GET /api/health`
 - `GET /api/cities`
 - `GET /api/regions?city=aleppo`
 - `GET /api/categories`
 - `GET /api/businesses?page=1&limit=20&q=&city=&category=&region=`
 - `GET /api/businesses/:slug`
+- `POST /api/submissions`
+- `POST /api/reports`
 
-تظهر المناطق المتاحة في فلتر المنطقة بعد اختيار المدينة. لا تزرع النسخة الحالية مناطق تجريبية؛ يجب إضافة أسماء المناطق الصحيحة إلى جدول `regions` قبل ظهورها للمستخدمين.
+## واجهات الإدارة
 
-## إدارة محتوى الدليل\n\nمن لوحة الإدارة يمكن إضافة التصنيفات والمدن والمناطق، وتعديلها أو تفعيلها وتعطيلها. كما يمكن تعديل بيانات المشروع وتصنيفه وموقعه وحالة نشره، مع تسجيل الحقول التي تغيرت في سجل التعديلات. التعطيل لا يحذف السجلات المرتبطة بالمشاريع. المسارات المحمية: `GET/POST /api/admin/categories`, `GET/POST /api/admin/cities`, `GET/POST /api/admin/regions`، و`PATCH` على `/:id` لكل نوع، و`GET /api/admin/dashboard` لإحصائيات الدليل، و`GET /api/admin/notifications` لعرض التنبيهات و`PATCH /api/admin/notifications/:id` لتعليم التنبيه كمقروء، و`PATCH /api/admin/businesses/:id` لتعديل المشروع، و`GET /api/admin/business-logs?business_id=:id` لسجل التغييرات.\n\n## التنبيهات الإدارية
+جميع المسارات تحت `/api/admin/*` تتطلب ترويسة `Authorization: Bearer <ADMIN_API_KEY>`.
 
-التنبيهات تُحفظ في D1 وتظهر داخل لوحة الإدارة. تغطي الطلبات الجديدة، ونتيجة مراجعة Gemini، وفشل فحص Gemini، والبلاغات. هذه تنبيهات داخل لوحة الإدارة وليست إشعارات دفع أو بريد أو إشعارات هاتف، ولا تعمل كتنبيه فوري عندما تكون لوحة الإدارة مغلقة.
-
-## مسارات الإدارة والمالك
-
-- لوحة الإدارة: `/admin.html`
-- لوحة صاحب المشروع: `/owner.html`
-- `GET/PATCH /api/owner/business`
-- `GET/POST /api/owner/business/images`
-- `DELETE /api/owner/images/:id`
-- مسارات إدارة الطلبات والبلاغات والمشاريع والصور موجودة ضمن `/api/admin/*` وتتطلب `ADMIN_API_KEY`.
-
-رمز المالك يُخزّن في D1 كـ SHA-256 hash. الرمز يمنح التحكم بالمشروع لمن يحمله، لكنه لا يثبت الهوية القانونية أو ملكية النشاط التجاري. لا توجد آلية استعادة رمز في النسخة الحالية.
+- `GET /api/admin/dashboard`
+- `GET /api/admin/notifications`
+- `PATCH /api/admin/notifications/:id`
+- `GET/POST /api/admin/categories` و`PATCH /api/admin/categories/:id`
+- `GET/POST /api/admin/cities` و`PATCH /api/admin/cities/:id`
+- `GET/POST /api/admin/regions` و`PATCH /api/admin/regions/:id`
+- `GET /api/admin/submissions` و`PATCH /api/admin/submissions/:id`
+- `GET /api/admin/reports` و`PATCH /api/admin/reports/:id`
+- إدارة المشاريع وسجل التعديلات ضمن `/api/admin/*`.
 
 ## الإعداد
 
-1. ثبّت Node.js LTS وWrangler.
-2. أنشئ قاعدة D1 باسم `redro-daleel`، ثم ضع المعرّف الحقيقي في `wrangler.toml`.
-3. أنشئ حاوية R2 وضع اسمها في `wrangler.toml`.
-4. انسخ `.dev.vars.example` إلى `.dev.vars` وأدخل الأسرار محلياً.
-5. طبّق ترحيلات D1 بالترتيب.
-6. أضف أسرار `GEMINI_API_KEY` و`TURNSTILE_SECRET` و`ADMIN_API_KEY` إلى بيئة Pages.
-7. اضبط `GEMINI_MODEL` كمتغير عادي، وتحقق من توفر النموذج في مشروع Gemini.
-8. ضع Turnstile Site Key العام في `public/submit.html`، واترك Secret Key على الخادم فقط.
+1. اربط مستودع `mhamedshasho/redro-daleel` بمشروع Cloudflare Pages.
+2. استخدم فرع `main` ومجلد إخراج `public` مع تفعيل Pages Functions.
+3. اربط قاعدة D1 باسم binding `DB` وقاعدة `redro-daleel`.
+4. تأكد من تطبيق ترحيلات D1 بالترتيب من `migrations/0001` إلى `migrations/0005`.
+5. أضف الأسرار التالية في إعدادات Pages Production:
+   - `ADMIN_API_KEY` — مفتاح عشوائي طويل تحفظه بأمان.
+   - `GEMINI_API_KEY` — مفتاح Google AI Studio.
+   - `TURNSTILE_SECRET` — المفتاح السري لعنصر Turnstile.
+6. أضف `GEMINI_MODEL` كمتغير Plain text بالقيمة `gemini-2.5-flash`.
+7. لا تضع الأسرار في ملفات المستودع أو ترسلها في المحادثات.
+8. افتح `/api/health`، ثم اختبر لوحة الإدارة ونموذج الإرسال فعلياً.
 
-## الدخول إلى لوحة الإدارة\n\nافتح `/admin.html`. يلزم نشر Pages وربط D1 وR2 وضبط `ADMIN_API_KEY` أولاً. صفحة `/admin-setup.html` تشرح الإعداد خطوة بخطوة، و`GET /api/health` يعرض حالة الربط دون كشف الأسرار. لا يمكن تسجيل الدخول قبل ضبط المفتاح في بيئة Pages.\n\n## الحالة التشغيلية والاختبارات
+صفحة `/admin-setup.html` تحتوي خطوات الإعداد. لوحة الإدارة متاحة عبر `/admin.html`.
 
-المستودع يحتوي على الكود والترحيلات، لكن لا يعني ذلك أن الخدمة منشورة أو مربوطة بحساب Cloudflare. لم يتم في هذه المرحلة التحقق من إعداد D1/R2 الفعلي أو تنفيذ اختبار Worker حي أو اختبار API إنتاجي. لا تستخدم النسخة كنظام إنتاج قبل تطبيق الترحيلات وضبط الأسرار والـ bindings وإجراء اختبارات تشغيل وأمان.
+## تخزين الصور الاختياري
+
+عند توفر R2 مستقبلاً، أنشئ bucket واربطه في Pages باسم binding `IMAGES`. لا تضف binding وهمياً ولا تعتبر الصور عاملة قبل اختبار الرفع والاسترجاع والحذف.
 
 ## بنية الملفات
 
-- `public/`: الواجهة والصفحات، بما فيها `admin.html` و`admin-setup.html`.
-- `functions/api/[...path].js`: واجهات Pages Functions.
-- `migrations/`: ترحيلات D1.
-- `wrangler.toml`: إعدادات Cloudflare Pages والـ bindings.
+- `public/`: صفحات الموقع وملفات CSS وJavaScript.
+- `functions/api/[[path]].js`: واجهات Cloudflare Pages Functions.
+- `migrations/`: ترحيلات قاعدة D1.
+- `wrangler.toml`: إعدادات المشروع وربط D1.
