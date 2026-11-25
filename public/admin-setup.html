@@ -12,15 +12,13 @@
 <p>أضف المتغيرات والأسرار من إعدادات Cloudflare Pages ضمن Production. لا تضع أي مفتاح سري في ملفات الموقع أو GitHub أو المحادثات.</p>
 <ul>
 <li><code>ADMIN_API_KEY</code> — Secret: أنشئ قيمة عشوائية طويلة واحفظها في مدير كلمات مرور. أدخل القيمة نفسها في نموذج الدخول إلى <code>/admin.html</code>.</li>
-<li><code>GEMINI_API_KEY</code> — Secret: أنشئ المفتاح من <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">Google AI Studio</a> ثم أضفه مباشرة إلى Cloudflare.</li>
-<li><code>GEMINI_MODEL</code> — Plain text: القيمة الحالية <code>gemini-2.5-flash</code>.</li>
 <li><code>TURNSTILE_SECRET</code> — Secret: أدخل المفتاح السري الخاص بموقع Turnstile المرتبط بنطاق <code>redro-daleel.pages.dev</code>.</li>
 </ul>
-<p>إذا أردت استخدام روابط Preview لاختبار إرسال الطلبات، أضف أسرار Gemini وTurnstile وAdmin إلى إعدادات Preview أيضاً. لا تشارك قيم الأسرار مع أي شخص.</p>
+<p>إذا أردت استخدام روابط Preview لاختبار إرسال الطلبات، أضف أسرار Turnstile وAdmin إلى إعدادات Preview أيضاً. لا تشارك قيم الأسرار مع أي شخص.</p>
 <h2>3. تخزين الصور</h2>
 <p>R2 غير مربوط حالياً بسبب متطلبات تفعيل الفوترة. لا تحتاج إلى R2 لتشغيل التصفح والبحث وإدارة البيانات الأساسية. رفع الصور وعرضها سيعيدان رسالة أن تخزين الصور غير متاح إلى أن يتم ربط R2 لاحقاً باسم binding <code>IMAGES</code>.</p>
 <h2>4. التحقق والدخول</h2>
-<ol><li>انتظر نجاح آخر نشر من فرع <code>main</code>.</li><li>افتح <code>/api/health</code> وتحقق من حالة قاعدة البيانات والخدمات. لا تكشف الصفحة أي قيمة سرية.</li><li>افتح <code>/admin.html</code> وأدخل قيمة <code>ADMIN_API_KEY</code> التي ضبطتها في Cloudflare.</li><li>اختبر نموذج تقديم مشروع بعد التأكد من إعداد Gemini وTurnstile. لا يُنشر الطلب إذا تعذرت مراجعة Gemini؛ يُحفظ لإعادة المحاولة.</li></ol>
+<ol><li>انتظر نجاح آخر نشر من فرع <code>main</code>.</li><li>افتح <code>/api/health</code> وتحقق من حالة قاعدة البيانات والخدمات. لا تكشف الصفحة أي قيمة سرية.</li><li>افتح <code>/admin.html</code> وأدخل قيمة <code>ADMIN_API_KEY</code> التي ضبطتها في Cloudflare.</li><li>اختبر نموذج تقديم مشروع بعد التأكد من إعداد Turnstile. كل طلب ينتظر مراجعة المدير يدوياً قبل النشر.</li></ol>
 <p><strong>مهم:</strong> نجاح نشر Pages لا يثبت وحده أن كل الأسرار صحيحة أو أن إرسال الطلبات يعمل. يجب إجراء اختبار فعلي للـ API ونموذج الإرسال ولوحة الإدارة قبل اعتبار المشروع جاهزاً للإنتاج.</p>
 <a class="button" href="/admin.html">الانتقال إلى لوحة الإدارة</a>
 </section></main>
