@@ -20,4 +20,5 @@ document.addEventListener("click",async e=>{const s=e.target.closest("[data-subm
 $("#business-editor").addEventListener("submit",async e=>{e.preventDefault();if(!selectedBusiness)return;const values=Object.fromEntries(new FormData(e.currentTarget));try{const result=await call("businesses/"+selectedBusiness.id,{method:"PATCH",headers:{"content-type":"application/json"},body:JSON.stringify(values)});message(result.status==="updated"?"تم حفظ التعديلات وتسجيلها.":"لا توجد تغييرات.");await loadBusinesses($("#business-query").value.trim());await loadBusinessAudit()}catch(error){message("تعذر حفظ المشروع: "+error.message,true)}});
 $("#business-search").addEventListener("submit",e=>{e.preventDefault();loadBusinesses($("#business-query").value.trim()).catch(error=>message(error.message,true))});
 $("#image-upload").addEventListener("submit",async e=>{e.preventDefault();if(!selectedBusiness)return;const button=e.currentTarget.querySelector("button");button.disabled=true;const data=new FormData(e.currentTarget);try{const result=await call("businesses/"+selectedBusiness.id+"/images",{method:"POST",body:data});message("تم رفع الصورة: "+result.url);e.currentTarget.reset();await loadBusinessImages()}catch(error){message("فشل رفع الصورة: "+error.message,true)}finally{button.disabled=false}});
-\ncheckService();\n
+
+checkService();
