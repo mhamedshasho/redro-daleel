@@ -1,10 +1,28 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#151519"><title>تجهيز إدارة Redro دليل</title><link rel="stylesheet" href="/app.css"></head>
-<body><header class="site-header"><a class="brand" href="/"><span class="brand-mark">R</span><span>REDRO <b>تجهيز الإدارة</b></span></a><a class="muted-link" href="/admin.html">العودة للدخول</a></header>
-<main class="admin-page"><section class="panel admin-section"><p class="eyebrow">دليل الإعداد</p><h1>كيف تدخل إلى لوحة الإدارة؟</h1><p>لوحة الإدارة ليست حساباً عاماً. يجب أولاً نشر المشروع وربط خدمات Cloudflare، ثم إنشاء مفتاح سري خاص بك.</p>
-<h2>1. أنشئ مشروع Cloudflare Pages</h2><ol><li>اربط مستودع <code>mhamedshasho/redro-daleel</code> بحساب Cloudflare Pages من GitHub.</li><li>اجعل مجلد البناء <code>public</code>، واترك إعدادات Functions مفعلة من مجلد <code>functions</code>.</li><li>لا تستخدم GitHub Pages؛ هذا المشروع يحتاج Pages Functions وD1 وR2.</li></ol>
-<h2>2. اربط قاعدة D1 وتخزين R2</h2><ol><li>أنشئ D1 باسم <code>redro-daleel</code>.</li><li>أنشئ R2 bucket واختر اسماً له.</li><li>حدّث <code>wrangler.toml</code>: استبدل قيمة <code>REPLACE_WITH_CLOUDFLARE_D1_DATABASE_ID</code> بمعرّف D1، و<code>REPLACE_WITH_R2_BUCKET_NAME</code> باسم الحاوية.</li><li>طبّق كل ملفات <code>migrations/</code> على D1 بالترتيب، من 0001 إلى 0005.</li><li>في إعدادات Pages، أضف binding باسم <code>DB</code> من نوع D1 وbinding باسم <code>IMAGES</code> من نوع R2.</li></ol>
-<h2>3. أضف متغيرات وأسرار Pages</h2><p>أضف الأسرار التالية في إعدادات المشروع، ضمن Production وكذلك Preview إذا أردت اختبار المعاينة:</p><ul><li><code>ADMIN_API_KEY</code>: مفتاح عشوائي طويل تحفظه أنت في مدير كلمات المرور. هذا هو المفتاح الذي تدخله في صفحة الإدارة.</li><li><code>GEMINI_API_KEY</code> و<code>GEMINI_MODEL</code>: لمراجعة الطلبات بالذكاء الاصطناعي.</li><li><code>TURNSTILE_SECRET</code>: مفتاح Turnstile السري.</li></ul><p>لا تضع هذه المفاتيح داخل ملفات JavaScript أو HTML ولا ترسلها في المحادثات.</p>
-<h2>4. تحقق ثم ادخل</h2><ol><li>انتظر نجاح نشر Pages.</li><li>افتح <code>/api/health</code> وتحقق من ظهور قاعدة البيانات ومفتاح الإدارة بحالة جاهزة. يمكن أن تبقى خدمات Gemini أو Turnstile غير مضبوطة أثناء اختبار لوحة الإدارة فقط.</li><li>افتح <code>/admin.html</code>، وأدخل قيمة <code>ADMIN_API_KEY</code> نفسها.</li></ol>
-<p><strong>مهم:</strong> لا يمكنني إنشاء موارد داخل حساب Cloudflare أو ضبط أسرارك من المستودع وحده. هذه الخطوات تحتاج صلاحية حساب Cloudflare الخاص بك. لا تنشر مفاتيحك في GitHub.</p><a class="button" href="/admin.html">الانتقال إلى لوحة الإدارة</a></section></main><footer class="site-footer">Redro · دليل الإدارة</footer></body></html>
+<body>
+<header class="site-header"><a class="brand" href="/"><span class="brand-mark">R</span><span>REDRO <b>تجهيز الإدارة</b></span></a><a class="muted-link" href="/admin.html">العودة للدخول</a></header>
+<main class="admin-page"><section class="panel admin-section">
+<p class="eyebrow">دليل الإعداد</p><h1>تجهيز Redro دليل</h1>
+<p>المشروع يعمل على Cloudflare Pages وPages Functions وD1. تخزين الصور R2 اختياري وغير مفعّل حالياً؛ بقية الدليل يجب أن تعمل دون R2، بينما رفع الصور سيبقى غير متاح.</p>
+<h2>1. ربط المشروع وقاعدة البيانات</h2>
+<ol><li>اربط مستودع <code>mhamedshasho/redro-daleel</code> بحساب Cloudflare Pages.</li><li>فرع الإنتاج هو <code>main</code> ومجلد النشر <code>public</code>، مع إبقاء Pages Functions مفعّلة.</li><li>اربط D1 باسم binding <code>DB</code> بقاعدة البيانات <code>redro-daleel</code>.</li><li>تم تطبيق ترحيلات D1 من <code>0001</code> إلى <code>0005</code> على قاعدة البيانات المرتبطة. لا تعِد تطبيقها يدوياً دون التحقق من سجل الترحيلات.</li></ol>
+<h2>2. إعداد مفاتيح الخدمات</h2>
+<p>أضف المتغيرات والأسرار من إعدادات Cloudflare Pages ضمن Production. لا تضع أي مفتاح سري في ملفات الموقع أو GitHub أو المحادثات.</p>
+<ul>
+<li><code>ADMIN_API_KEY</code> — Secret: أنشئ قيمة عشوائية طويلة واحفظها في مدير كلمات مرور. أدخل القيمة نفسها في نموذج الدخول إلى <code>/admin.html</code>.</li>
+<li><code>GEMINI_API_KEY</code> — Secret: أنشئ المفتاح من <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">Google AI Studio</a> ثم أضفه مباشرة إلى Cloudflare.</li>
+<li><code>GEMINI_MODEL</code> — Plain text: القيمة الحالية <code>gemini-2.5-flash</code>.</li>
+<li><code>TURNSTILE_SECRET</code> — Secret: أدخل المفتاح السري الخاص بموقع Turnstile المرتبط بنطاق <code>redro-daleel.pages.dev</code>.</li>
+</ul>
+<p>إذا أردت استخدام روابط Preview لاختبار إرسال الطلبات، أضف أسرار Gemini وTurnstile وAdmin إلى إعدادات Preview أيضاً. لا تشارك قيم الأسرار مع أي شخص.</p>
+<h2>3. تخزين الصور</h2>
+<p>R2 غير مربوط حالياً بسبب متطلبات تفعيل الفوترة. لا تحتاج إلى R2 لتشغيل التصفح والبحث وإدارة البيانات الأساسية. رفع الصور وعرضها سيعيدان رسالة أن تخزين الصور غير متاح إلى أن يتم ربط R2 لاحقاً باسم binding <code>IMAGES</code>.</p>
+<h2>4. التحقق والدخول</h2>
+<ol><li>انتظر نجاح آخر نشر من فرع <code>main</code>.</li><li>افتح <code>/api/health</code> وتحقق من حالة قاعدة البيانات والخدمات. لا تكشف الصفحة أي قيمة سرية.</li><li>افتح <code>/admin.html</code> وأدخل قيمة <code>ADMIN_API_KEY</code> التي ضبطتها في Cloudflare.</li><li>اختبر نموذج تقديم مشروع بعد التأكد من إعداد Gemini وTurnstile. لا يُنشر الطلب إذا تعذرت مراجعة Gemini؛ يُحفظ لإعادة المحاولة.</li></ol>
+<p><strong>مهم:</strong> نجاح نشر Pages لا يثبت وحده أن كل الأسرار صحيحة أو أن إرسال الطلبات يعمل. يجب إجراء اختبار فعلي للـ API ونموذج الإرسال ولوحة الإدارة قبل اعتبار المشروع جاهزاً للإنتاج.</p>
+<a class="button" href="/admin.html">الانتقال إلى لوحة الإدارة</a>
+</section></main>
+<footer class="site-footer">Redro · دليل الإدارة</footer>
+</body></html>
