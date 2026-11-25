@@ -1,3 +1,5 @@
 GEMINI_API_KEY=
 GEMINI_MODEL=gemini-2.5-flash
 TURNSTILE_SECRET=
+
+ADMIN_API_KEY=replace-with-a-long-random-secret
