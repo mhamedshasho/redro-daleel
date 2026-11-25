@@ -25,7 +25,8 @@
 
 ## واجهات عامة
 
-- `POST /api/owner/login` و`POST /api/owner/logout` و`GET /api/owner/session` لحسابات المالكين الموثقة والمجهزة مسبقاً.\n- `GET /api/health`
+- `POST /api/owner/login` و`POST /api/owner/logout` و`GET /api/owner/session` لحسابات المالكين الموثقة والمجهزة مسبقاً.
+- `GET /api/health`
 - `GET /api/cities`
 - `GET /api/regions?city=aleppo`
 - `GET /api/categories`
