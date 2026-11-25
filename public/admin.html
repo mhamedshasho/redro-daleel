@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#151519"><title>إدارة Redro دليل</title><link rel="stylesheet" href="/app.css"><script defer src="/admin.js"></script></head>
+<body><header class="site-header"><a class="brand" href="/"><span class="brand-mark">R</span><span>REDRO <b>إدارة الدليل</b></span></a><a class="muted-link" href="/">العودة للدليل</a></header>
+<main class="admin-page"><section class="admin-login panel"><h1>لوحة إدارة Redro دليل</h1><p>أدخل مفتاح الإدارة للوصول إلى الطلبات والبلاغات والصور. المفتاح يبقى في ذاكرة الصفحة فقط.</p><form id="admin-login"><input id="admin-key" type="password" autocomplete="off" placeholder="مفتاح الإدارة" required><button class="button">دخول</button></form><p id="admin-message" role="status"></p></section>
+<div id="admin-workspace" hidden>
+<section class="admin-section panel"><div class="admin-heading"><h2>طلبات إضافة المشاريع</h2><button class="button button-ghost" data-refresh="submissions">تحديث</button></div><div id="submissions-list" class="admin-list"></div></section>
+<section class="admin-section panel"><div class="admin-heading"><h2>البلاغات</h2><button class="button button-ghost" data-refresh="reports">تحديث</button></div><div id="reports-list" class="admin-list"></div></section>
+<section class="admin-section panel"><h2>إدارة صور المشاريع</h2><form id="business-search"><input id="business-query" placeholder="ابحث باسم المشروع أو الرابط"><button class="button">بحث</button></form><div id="business-list" class="admin-list"></div><form id="image-upload" hidden><h3 id="selected-business"></h3><label>اختر صورة JPEG أو PNG أو WebP<input type="file" name="image" accept="image/jpeg,image/png,image/webp" required></label><small>الحد الأقصى 5 ميغابايت، وحتى 8 صور للمشروع.</small><button class="button">رفع الصورة إلى R2</button></form></section>
+</div></main><footer class="site-footer"><span>Redro · إدارة الدليل</span></footer></body></html>

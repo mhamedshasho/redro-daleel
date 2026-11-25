@@ -57,6 +57,8 @@
 - `GET /api/businesses?page=1&limit=20&q=&city=&category=`
 - `GET /api/businesses/:slug`
 - `POST /api/submissions`\n- `POST /api/reports`\n- `GET /api/admin/submissions` (Bearer ADMIN_API_KEY)\n- `PATCH /api/admin/submissions/:id` (Bearer ADMIN_API_KEY)\n- `GET /api/admin/reports` (Bearer ADMIN_API_KEY)
+- `GET /api/admin/businesses?q=` (Bearer ADMIN_API_KEY)
+- لوحة الإدارة: `/admin.html` (تتطلب ADMIN_API_KEY)
 - `POST /api/admin/businesses/:id/images` (multipart field `image`, Bearer ADMIN_API_KEY)
 - `DELETE /api/admin/images/:imageId` (Bearer ADMIN_API_KEY)
 - `GET /api/images/:imageId` (public, published businesses only)\n- `PATCH /api/admin/reports/:id` (Bearer ADMIN_API_KEY)
