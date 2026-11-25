@@ -5,21 +5,18 @@
 <header class="site-header"><a class="brand" href="/"><span class="brand-mark">R</span><span>REDRO <b>تجهيز الإدارة</b></span></a><a class="muted-link" href="/admin.html">العودة للدخول</a></header>
 <main class="admin-page"><section class="panel admin-section">
 <p class="eyebrow">دليل الإعداد</p><h1>تجهيز Redro دليل</h1>
-<p>المشروع يعمل على Cloudflare Pages وPages Functions وD1. تخزين الصور R2 اختياري وغير مفعّل حالياً؛ بقية الدليل يجب أن تعمل دون R2، بينما رفع الصور سيبقى غير متاح.</p>
+<p>المشروع يعمل على Cloudflare Pages وPages Functions وD1. تصفح الدليل لا يحتاج إلى حساب. لوحة الإدارة محمية بحساب مدير مستقل.</p>
 <h2>1. ربط المشروع وقاعدة البيانات</h2>
-<ol><li>اربط مستودع <code>mhamedshasho/redro-daleel</code> بحساب Cloudflare Pages.</li><li>فرع الإنتاج هو <code>main</code> ومجلد النشر <code>public</code>، مع إبقاء Pages Functions مفعّلة.</li><li>اربط D1 باسم binding <code>DB</code> بقاعدة البيانات <code>redro-daleel</code>.</li><li>تم تطبيق ترحيلات D1 من <code>0001</code> إلى <code>0005</code> على قاعدة البيانات المرتبطة. لا تعِد تطبيقها يدوياً دون التحقق من سجل الترحيلات.</li></ol>
-<h2>2. إعداد مفاتيح الخدمات</h2>
-<p>أضف المتغيرات والأسرار من إعدادات Cloudflare Pages ضمن Production. لا تضع أي مفتاح سري في ملفات الموقع أو GitHub أو المحادثات.</p>
-<ul>
-<li><code>ADMIN_API_KEY</code> — Secret: أنشئ قيمة عشوائية طويلة واحفظها في مدير كلمات مرور. أدخل القيمة نفسها في نموذج الدخول إلى <code>/admin.html</code>.</li>
-<li><code>TURNSTILE_SECRET</code> — Secret: أدخل المفتاح السري الخاص بموقع Turnstile المرتبط بنطاق <code>redro-daleel.pages.dev</code>.</li>
-</ul>
-<p>إذا أردت استخدام روابط Preview لاختبار إرسال الطلبات، أضف أسرار Turnstile وAdmin إلى إعدادات Preview أيضاً. لا تشارك قيم الأسرار مع أي شخص.</p>
-<h2>3. تخزين الصور</h2>
-<p>R2 غير مربوط حالياً بسبب متطلبات تفعيل الفوترة. لا تحتاج إلى R2 لتشغيل التصفح والبحث وإدارة البيانات الأساسية. رفع الصور وعرضها سيعيدان رسالة أن تخزين الصور غير متاح إلى أن يتم ربط R2 لاحقاً باسم binding <code>IMAGES</code>.</p>
-<h2>4. التحقق والدخول</h2>
-<ol><li>انتظر نجاح آخر نشر من فرع <code>main</code>.</li><li>افتح <code>/api/health</code> وتحقق من حالة قاعدة البيانات والخدمات. لا تكشف الصفحة أي قيمة سرية.</li><li>افتح <code>/admin.html</code> وأدخل قيمة <code>ADMIN_API_KEY</code> التي ضبطتها في Cloudflare.</li><li>اختبر نموذج تقديم مشروع بعد التأكد من إعداد Turnstile. كل طلب ينتظر مراجعة المدير يدوياً قبل النشر.</li></ol>
-<p><strong>مهم:</strong> نجاح نشر Pages لا يثبت وحده أن كل الأسرار صحيحة أو أن إرسال الطلبات يعمل. يجب إجراء اختبار فعلي للـ API ونموذج الإرسال ولوحة الإدارة قبل اعتبار المشروع جاهزاً للإنتاج.</p>
+<ol><li>المستودع: <code>mhamedshasho/redro-daleel</code>، فرع الإنتاج <code>main</code> ومجلد النشر <code>public</code>.</li><li>يجب أن يبقى D1 binding باسم <code>DB</code> مرتبطاً بقاعدة <code>redro-daleel</code>.</li><li>ترحيل <code>0011_admin_sessions_and_login_limits.sql</code> أُضيف إلى المستودع وطُبّق على قاعدة D1.</li></ol>
+<h2>2. إعداد دخول المدير</h2>
+<p>من Cloudflare Dashboard افتح Workers & Pages ثم مشروع <code>redro-daleel</code> ثم Settings ثم Variables and Secrets. أضف الأسرار التالية لبيئة Production فقط:</p>
+<ul><li><code>ADMIN_PHONE</code> — Secret: رقم هاتف المدير بصيغته الدولية، من دون مسافات أو فواصل.</li><li><code>ADMIN_PASSWORD_HASH</code> — Secret: ناتج أداة توليد التجزئة الموجودة في <code>scripts/hash-admin-password.mjs</code>. شغّلها محلياً باستخدام <code>node scripts/hash-admin-password.mjs</code>، واكتب كلمة مرور جديدة قوية في الطرفية. لا تضع كلمة المرور نفسها في Cloudflare.</li></ul>
+<p>استخدم كلمة مرور جديدة غير التي سبق إرسالها في المحادثة. لا ترسلها هنا ولا تحفظها في GitHub. أعد النشر بعد إضافة السرّين.</p>
+<h2>3. إعداد Turnstile والصور</h2>
+<ul><li><code>TURNSTILE_SECRET</code> — Secret: مفتاح Turnstile الخاص بالنطاق. من دونه لن تعمل نماذج التقديم والبلاغات.</li><li>R2 اختياري حالياً؛ رفع الصور يبقى غير متاح حتى ربط bucket باسم binding <code>IMAGES</code>.</li></ul>
+<h2>4. التحقق</h2>
+<ol><li>انتظر نجاح آخر نشر من <code>main</code>.</li><li>افتح <code>/api/health</code> وتحقق من ظهور <code>admin: true</code> و<code>database: true</code>.</li><li>افتح <code>/admin.html</code> وسجّل الدخول برقم المدير وكلمة المرور الجديدة.</li><li>اختبر تسجيل الخروج، ثم الدخول مجدداً. الجلسة تستخدم Cookie من نوع HttpOnly وتنتهي بعد 8 ساعات، مع حظر مؤقت بعد خمس محاولات فاشلة.</li></ol>
+<p><strong>مهم:</strong> نجاح النشر وحده لا يعني أن حساب المدير مفعّل؛ يجب ضبط الأسرار أولاً ثم اختبار تسجيل الدخول فعلياً.</p>
 <a class="button" href="/admin.html">الانتقال إلى لوحة الإدارة</a>
 </section></main>
 <footer class="site-footer">Redro · دليل الإدارة</footer>
