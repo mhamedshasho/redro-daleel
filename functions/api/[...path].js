@@ -54,6 +54,7 @@ if(request.method==="PATCH"&&adminPath.startsWith("submissions/")){let input;try
 return json({error:"not_found"},404)}
 
 
+if(request.method==="GET"&&path==="health"){let database=false;try{await env.DB.prepare("SELECT 1 AS ok").first();database=true}catch{}return json({status:database&&!!env.ADMIN_API_KEY?"ready":"setup_required",services:{database,images:!!env.IMAGES,gemini:!!env.GEMINI_API_KEY&&!!env.GEMINI_MODEL,turnstile:!!env.TURNSTILE_SECRET,admin:!!env.ADMIN_API_KEY}})}
 if(request.method==="GET"&&path.startsWith("images/")){if(!env.IMAGES)return json({error:"image_storage_unavailable"},503);const id=path.slice(7);const image=await env.DB.prepare("SELECT i.object_key,i.content_type FROM business_images i JOIN businesses b ON b.id=i.business_id WHERE i.id=? AND b.status='published' LIMIT 1").bind(id).first();if(!image)return json({error:"not_found"},404);const object=await env.IMAGES.get(image.object_key);if(!object)return json({error:"not_found"},404);return new Response(object.body,{headers:{"content-type":image.content_type,"cache-control":"public, max-age=31536000, immutable","x-content-type-options":"nosniff","content-security-policy":"default-src 'none'; sandbox"}})}
 
 if(request.method==="GET"&&path==="categories"){const {results}=await env.DB.prepare("SELECT slug,name_ar FROM categories WHERE is_active=1 ORDER BY sort_order,name_ar").all();return json({items:results},200,{"cache-control":"public, max-age=300, s-maxage=1800"})}
