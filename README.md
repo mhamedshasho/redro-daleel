@@ -43,7 +43,7 @@
 
 أضف الأسرار في إعدادات Pages أو عبر Wrangler Secrets:
 - `GEMINI_API_KEY`
-- `TURNSTILE_SECRET`
+- `TURNSTILE_SECRET`\n- `ADMIN_API_KEY` (مفتاح عشوائي طويل يُحفظ كـ Secret ولا يوضع في الواجهة)
 
 أضف متغيراً عادياً:
 - `GEMINI_MODEL=gemini-2.5-flash` (تحقق من توفر اسم النموذج في مشروع Gemini قبل الاستخدام).
@@ -56,7 +56,7 @@
 - `GET /api/cities`
 - `GET /api/businesses?page=1&limit=20&q=&city=&category=`
 - `GET /api/businesses/:slug`
-- `POST /api/submissions`
+- `POST /api/submissions`\n- `POST /api/reports`\n- `GET /api/admin/submissions` (Bearer ADMIN_API_KEY)\n- `PATCH /api/admin/submissions/:id` (Bearer ADMIN_API_KEY)\n- `GET /api/admin/reports` (Bearer ADMIN_API_KEY)\n- `PATCH /api/admin/reports/:id` (Bearer ADMIN_API_KEY)
 
 يحتاج مسار التقديم إلى Turnstile صالحاً بالـ action المحدد `business_submission` وباسم المضيف المطابق لنطاق الطلب، وإعداد Gemini. إذا تعذر فحص Gemini، يُحفظ الطلب بحالة `pending_retry` ولا ينشر.
 
@@ -71,7 +71,7 @@
 ## ما لم يكتمل بعد
 
 - ملكية المشاريع وتسجيل أصحابها وتعديل بياناتهم بأمان.
-- لوحة الإدارة والمراجعة والبلاغات.
+- واجهة لوحة الإدارة المرئية؛ توجد الآن واجهات API محمية لإدارة الطلبات والبلاغات.
 - رفع الصور إلى R2 والتحقق من محتواها.
 - ساعات العمل وروابط التواصل الاجتماعي والعنوان التفصيلي.
 - Rate Limiting تشغيلي على مستوى المنصة.
