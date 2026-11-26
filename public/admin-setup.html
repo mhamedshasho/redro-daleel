@@ -11,7 +11,7 @@
 <h2>2. إعداد دخول المدير</h2>
 <p>من Cloudflare Dashboard افتح Workers & Pages ثم مشروع <code>redro-daleel</code> ثم Settings ثم Variables and Secrets. أضف الأسرار التالية لبيئة Production فقط:</p>
 <ul><li><code>ADMIN_PHONE</code> — Secret: رقم هاتف المدير؛ تقبل المطابقة الصيغة السورية المحلية أو الدولية.</li><li><code>ADMIN_PASSWORD_HASH</code> — Secret: ناتج أداة توليد التجزئة الموجودة في <code>scripts/hash-admin-password.mjs</code>. شغّلها محلياً باستخدام <code>node scripts/hash-admin-password.mjs</code>، واكتب كلمة مرور جديدة قوية في الطرفية. يمكنك نسخ السطر المطبوع كاملاً أو نسخ القيمة بعد علامة <code>=</code> فقط؛ كلا الشكلين مدعوم. لا تضع كلمة المرور نفسها في Cloudflare.</li></ul>
-<p>استخدم كلمة مرور جديدة غير التي سبق إرسالها في المحادثة. لا ترسلها هنا ولا تحفظها في GitHub. أعد النشر بعد إضافة السرّين.</p>
+<p>استخدم كلمة مرور جديدة غير التي سبق إرسالها في المحادثة. لا ترسلها هنا ولا تحفظها في GitHub. أعد النشر بعد إضافة السرّين.</p><p><strong>تحقق من صيغة التجزئة:</strong> يجب أن تكون قيمة <code>ADMIN_PASSWORD_HASH</code> بصيغة <code>pbkdf2$310000$...</code>، وليست كلمة المرور نفسها أو تجزئة SHA-256 عادية. إذا ظهرت رسالة <code>admin_password_hash_invalid_configuration</code>، أعد توليدها بالأداة واستبدل قيمة السر في Production.</p>
 <h2>3. إعداد Turnstile والصور</h2>
 <ul><li><code>TURNSTILE_SECRET</code> — Secret: مفتاح Turnstile الخاص بالنطاق. من دونه لن تعمل نماذج التقديم والبلاغات.</li><li>R2 اختياري حالياً؛ رفع الصور يبقى غير متاح حتى ربط bucket باسم binding <code>IMAGES</code>.</li></ul>
 <h2>4. التحقق</h2>
