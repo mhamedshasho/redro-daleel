@@ -1,0 +1,23 @@
+:root{color-scheme:dark}
+body{background:#101014}
+.site-header{position:sticky;top:0;z-index:20;background:#111116ed;backdrop-filter:blur(14px);border-bottom:1px solid #ffffff12}
+.site-header .brand{gap:11px}
+.site-header .brand-mark{background:#d71920;color:#fff;box-shadow:0 0 24px #d7192033}
+.manager-label{font-size:12px;color:#aaa}
+.admin-page{width:min(1120px,calc(100% - 28px));margin:24px auto 64px;gap:16px}
+.admin-login.panel{max-width:560px;width:100%;margin:7vh auto 0;padding:24px;border:1px solid #ffffff18;background:linear-gradient(145deg,#202026,#17171c);border-radius:18px}
+.admin-login h1{font-size:25px;letter-spacing:-.4px}
+.admin-login form{display:grid;grid-template-columns:1fr;gap:12px;margin-top:20px}
+.admin-login input{min-height:48px}
+.admin-login .button{min-height:46px;background:#d71920;border-color:#d71920;color:#fff}
+.admin-section.panel{padding:18px;border:1px solid #ffffff14;background:#19191f;border-radius:16px}
+.admin-heading{gap:12px;flex-wrap:wrap}
+.admin-heading h2{margin:0}
+.admin-item{background:#202026;border-color:#ffffff12;border-radius:12px}
+.admin-actions button{border-color:#ffffff1a}
+.admin-page .button{border-radius:10px}
+.admin-page input,.admin-page textarea,.admin-page select{border-radius:10px}
+.admin-setup-status{background:#111116}
+.site-footer{border-top:1px solid #ffffff12}
+@media(min-width:760px){.admin-login form{grid-template-columns:1fr 1fr}.admin-login form .button{grid-column:1/-1}.admin-page{gap:18px}.admin-item{flex-direction:row;align-items:center}.admin-actions{width:auto}.admin-actions button{flex:0 0 auto}}
+@media(max-width:520px){.manager-label{font-size:10px}.admin-login.panel{padding:18px}.admin-section.panel{padding:14px}.admin-heading .button{font-size:11px}}
