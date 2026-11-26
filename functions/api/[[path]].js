@@ -41,7 +41,7 @@ const prompt=[
 JSON.stringify({name:submission.name,description:submission.description,city:submission.city_text,category:submission.category_text,phone:submission.phone,website:submission.website})
 ].join("\n");
 try{
-const response=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent,{
+const response=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",{
 method:"POST",
 headers:{"content-type":"application/json","x-goog-api-key":env.GEMINI_API_KEY},
 body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.1,responseMimeType:"application/json",responseSchema:{type:"OBJECT",properties:{decision:{type:"STRING",enum:["approve","reject","review"]},score:{type:"INTEGER"},reason:{type:"STRING"}},required:["decision","score","reason"]}}}),
